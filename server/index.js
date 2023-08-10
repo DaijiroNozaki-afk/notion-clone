@@ -2,12 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const PORT = 5000;
+require('dotenv').config();
 
 //DB接続
 try {
-  mongoose.connect(
-    'mongodb+srv://dnozaki88888888:TQY9iu1V5qIHKjkT@cluster0.xjffgte.mongodb.net/?retryWrites=true&w=majority'
-  );
+  mongoose.connect(process.env.MONGODB_URL);
   console.log('DB と接続中');
 } catch (err) {
   console.log(err);
