@@ -7,6 +7,9 @@ const app = express();
 const PORT = 5000;
 require('dotenv').config();
 
+//express でJSON を使えるようにする
+app.use(express.json());
+
 //DB接続
 try {
   mongoose.connect(process.env.MONGODB_URL);
