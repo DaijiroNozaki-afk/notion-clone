@@ -20,40 +20,40 @@ exports.register = async (req, res) => {
   }
 };
 //ユーザーログイン用API
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
     //DBからユーザーが存在するか探してくる
-    const user = await User.findOne({username: username})
+    const user = await User.findOne({ username: username });
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         errors: {
-          param: "username",
-          missage: "ユーザー名が無効です。"
-        }
-      })
+          param: 'username',
+          missage: 'ユーザー名が無効です。',
+        },
+      });
     }
     //パスワードが合っているか照合する。
     const descryptedPassword = CryptoJS.AES.decrypt(
       user.password,
-      process.env.TOKEN_SECRET_KEY
-    )
+      process.env.SECRET_KEY
+    ).toString(CryptoJS.enc.Utf8);
     if (descryptedPassword !== password) {
-      res.status(401).json({
+      return res.status(401).json({
         errors: {
-          param: "password",
-          missage: "パスワードが無効です。"
-        }
-      })
+          param: 'password',
+          missage: 'パスワードが無効です。',
+        },
+      });
     }
     //JWTの発行
     const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
       expiresIn: '24h',
     });
-    
-    return res.status(201).json({user, token})
-  } catch(err) {
-    return res.status(500).json(err)
+
+    return res.status(201).json({ user, token });
+  } catch (err) {
+    return res.status(500).json(err);
   }
 };
