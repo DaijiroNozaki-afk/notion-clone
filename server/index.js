@@ -14,7 +14,7 @@ app.use(
 
 //express でJSON を使えるようにする
 app.use(express.json());
-app.use('/api/v1', require('./src/v1/routes/auth'));
+app.use('/api/v1', require('./src/v1/routes'));
 
 //DB接続
 try {
