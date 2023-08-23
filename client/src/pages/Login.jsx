@@ -36,25 +36,25 @@ const Login = () => {
 
     setLoading(true);
 
-    //新規登録APIを叩く
+    //ログインAPIを叩く
     try {
-      const res = await authApi.register({
+      const res = await authApi.login({
         username,
         password,
       });
       setLoading(false);
       localStorage.setItem('token', res.token);
-      console.log('新規登録に成功しました。');
+      console.log('ログインに成功しました。');
       navigate('/');
     } catch (err) {
       const errors = err.data.errors;
       console.log(errors);
       errors.forEach((err) => {
-        if (err.path === 'username') {
+        if (err.param === 'username') {
           setUsernameErrText(err.msg);
           console.log(err.msg);
         }
-        if (err.path === 'password') {
+        if (err.param === 'password') {
           setPasswordErrText(err.msg);
         }
       });
