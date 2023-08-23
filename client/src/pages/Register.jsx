@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 import authApi from '../api/authApi';
 
 const Register = () => {
-  const [usernameErrText, setUsernameErrText] = useState();
-  const [passwordErrText, setPasswordErrText] = useState();
-  const [confirmErrText, setConfirmErrText] = useState();
+  const [usernameErrText, setUsernameErrText] = useState('');
+  const [passwordErrText, setPasswordErrText] = useState('');
+  const [confirmErrText, setConfirmErrText] = useState('');
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUsernameErrText('');
@@ -42,6 +43,9 @@ const Register = () => {
     }
 
     if (error) return;
+
+    setLoading(true);
+
     //新規登録APIを叩く
     try {
       const res = await authApi.register({
@@ -49,6 +53,7 @@ const Register = () => {
         password,
         confirmPassword,
       });
+      setLoading(false);
       localStorage.setItem('token', res.token);
       console.log('新規登録に成功しました。');
     } catch (err) {
@@ -66,6 +71,7 @@ const Register = () => {
           setConfirmErrText(err.msg);
         }
       });
+      setLoading(false);
     }
   };
   return (
@@ -80,6 +86,7 @@ const Register = () => {
           required
           helperText={usernameErrText}
           error={usernameErrText !== ''}
+          disabled={loading}
         />
         <TextField
           fullWidth
@@ -91,6 +98,7 @@ const Register = () => {
           required
           helperText={passwordErrText}
           error={passwordErrText !== ''}
+          disabled={loading}
         />
         <TextField
           fullWidth
@@ -102,6 +110,7 @@ const Register = () => {
           required
           helperText={confirmErrText}
           error={confirmErrText !== ''}
+          disabled={loading}
         />
         <LoadingButton
           sx={{ mt: 3, mb: 2 }}
@@ -110,6 +119,7 @@ const Register = () => {
           loading={false}
           color="primary"
           variant="outlined"
+          loading={loading}
         >
           アカウント作成
         </LoadingButton>
