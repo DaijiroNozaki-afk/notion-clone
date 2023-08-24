@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000/api/v1';
 const getToken = () => {
-  localStorage.getItem('token');
+  return localStorage.getItem('token');
 };
 
 const axiosClient = axios.create({
