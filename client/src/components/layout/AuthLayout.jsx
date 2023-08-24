@@ -5,7 +5,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import notionLogo from '../../assets/images/notion-logo.png';
 
 const AuthLayout = () => {
-  navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     //JWT を持っているのか確認する
