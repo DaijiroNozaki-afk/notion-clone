@@ -9,7 +9,7 @@ import {
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import React from 'react';
-
+import assets from '../../../assets/index';
 const Sidebar = () => {
   return (
     <Drawer
@@ -18,7 +18,13 @@ const Sidebar = () => {
       open={true}
       sx={{ width: 250, height: '100vh' }}
     >
-      <List sx={{ width: 250, height: '100vh' }}>
+      <List
+        sx={{
+          width: 250,
+          height: '100vh',
+          backgroundColor: assets.colors.secondary,
+        }}
+      >
         <ListItemButton>
           <Box
             sx={{
