@@ -10,7 +10,14 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import React from 'react';
 import assets from '../../../assets/index';
+import { useNavigate } from 'react-router-dom';
+
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
   return (
     <Drawer
       container={window.document.body}
@@ -37,7 +44,7 @@ const Sidebar = () => {
             <Typography variant="body2" fontWeight="700">
               shincode
             </Typography>
-            <IconButton>
+            <IconButton onClick={logout}>
               <LogoutOutlinedIcon />
             </IconButton>
           </Box>
