@@ -1,9 +1,10 @@
 import axiosClient from './axiosClient';
 
 const memoApi = {
-  create: (params) => axiosClient.post('memo'),
-  getAll: (params) => axiosClient.get('memo'),
+  create: () => axiosClient.post('memo'),
+  getAll: () => axiosClient.get('memo'),
   getOne: (id) => axiosClient.get(`memo/${id}`),
+  update: (id, params) => axiosClient.put(`memo/${id}`, params),
 };
 
 export default memoApi;
