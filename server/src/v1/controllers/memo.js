@@ -22,3 +22,14 @@ exports.getAll = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+exports.getOne = async (req, res) => {
+  const { memoId } = req.params;
+  try {
+    const memo = Memo.findOne({ user: req.user._id, _id: memoId });
+    if (!memo) return res.status(404).json('メモが存在しません。');
+    res.status(200).json(memo);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
