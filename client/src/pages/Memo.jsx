@@ -1,5 +1,5 @@
 import { Box, IconButton, TextField } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { useParams } from 'react-router-dom';
@@ -7,11 +7,16 @@ import memoApi from '../api/memoApi';
 
 const Memo = () => {
   const { memoId } = useParams();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
   useEffect(() => {
     const getMemo = async () => {
       try {
         const res = await memoApi.getOne(memoId);
-        console.log(res);
+        // console.log(res);
+        setTitle(res.title);
+        setDescription(res.description);
       } catch (err) {
         alert(err);
       }
@@ -36,6 +41,7 @@ const Memo = () => {
       </Box>
       <Box sx={{ padding: '10px 50px' }}>
         <TextField
+          value={title}
           placeholder="無題"
           variant="outlined"
           fullWidth
@@ -46,6 +52,7 @@ const Memo = () => {
           }}
         />
         <TextField
+          value={description}
           placeholder="追加"
           variant="outlined"
           fullWidth
