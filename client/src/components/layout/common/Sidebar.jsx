@@ -11,12 +11,15 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import React, { useEffect } from 'react';
 import assets from '../../../assets/index';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import memoApi from '../../../api/memoApi';
+import { setMemo } from '../../../redux/features/memoSlice';
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
+  const memos = useSelector((state) => state.memo.value);
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -28,6 +31,8 @@ const Sidebar = () => {
       try {
         const res = await memoApi.getAll();
         console.log(res);
+        dispatch(setMemo(res));
+        console.log(memos);
       } catch (err) {
         alert(err);
       }
