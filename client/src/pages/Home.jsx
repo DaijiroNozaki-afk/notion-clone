@@ -1,11 +1,24 @@
 import { LoadingButton } from '@mui/lab';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
-
+import memoApi from '../api/memoApi';
+import { useNavigate } from 'react-router-dom';
 const Home = () => {
+  const Navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const createMemo = () => {};
+  const createMemo = async () => {
+    try {
+      setLoading(true);
+      const res = await memoApi.create();
+      console.log(res);
+      Navigate(`/memo/${res._id}`);
+    } catch (err) {
+      alert(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Box
@@ -18,7 +31,7 @@ const Home = () => {
     >
       <LoadingButton
         variant="outlined"
-        onClick={() => createMemo}
+        onClick={() => createMemo()}
         loading={loading}
       >
         最初のメモを作成
