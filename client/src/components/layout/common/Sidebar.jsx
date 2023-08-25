@@ -8,10 +8,11 @@ import {
 } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import React from 'react';
+import React, { useEffect } from 'react';
 import assets from '../../../assets/index';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import memoApi from '../../../api/memoApi';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -21,6 +22,19 @@ const Sidebar = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
+
+  useEffect(() => {
+    const getMemos = async () => {
+      try {
+        const res = await memoApi.getAll();
+        console.log(res);
+      } catch (err) {
+        alert(err);
+      }
+    };
+    getMemos();
+  }, []);
+
   return (
     <Drawer
       container={window.document.body}
