@@ -79,6 +79,19 @@ const Memo = () => {
     }
   };
 
+  const onIconChange = async (newIcon) => {
+    let temp = [...memos];
+    const index = temp.findIndex((e) => e._id === memoId);
+    temp[index] = { ...temp[index], icon: newIcon };
+    setIcon(newIcon);
+    dispatch(setMemo(temp));
+    try {
+      await memoApi.update(memoId, { icon: newIcon });
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <>
       <Box
@@ -97,7 +110,7 @@ const Memo = () => {
       </Box>
       <Box sx={{ padding: '10px 50px' }}>
         <Box>
-          <EmojiPicker icon={icon} />
+          <EmojiPicker icon={icon} onChange={onIconChange} />
           <TextField
             onChange={updateTitle}
             value={title}
