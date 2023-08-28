@@ -26,6 +26,7 @@ const Memo = () => {
         setTitle(res.title);
         setDescription(res.description);
         setIcon(res.icon);
+        setIsStar(res.favorite);
       } catch (err) {
         alert('getMemo ' + err);
       }
@@ -106,7 +107,6 @@ const Memo = () => {
     } catch (err) {
       alert(err);
     }
-    //##### 読み込み時にふぁぼの有無を取得していない
   };
   return (
     <>
