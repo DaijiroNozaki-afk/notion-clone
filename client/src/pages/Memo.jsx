@@ -19,7 +19,6 @@ const Memo = () => {
     const getMemo = async () => {
       try {
         const res = await memoApi.getOne(memoId);
-        console.log(res);
         setTitle(res.title);
         setDescription(res.description);
       } catch (err) {

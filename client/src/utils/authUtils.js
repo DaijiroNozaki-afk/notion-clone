@@ -8,10 +8,10 @@ const authUtils = {
 
     try {
       const res = await authApi.verifyToken();
-      console.log('authUtils 成功');
+      // console.log('authUtils 成功');
       return res.user;
     } catch {
-      console.log('authUtils 失敗');
+      // console.log('authUtils 失敗');
       return false;
     }
   },
