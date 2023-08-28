@@ -1,6 +1,7 @@
 import { Box, IconButton, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import StarIcon from '@mui/icons-material/Star';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { useNavigate, useParams } from 'react-router-dom';
 import memoApi from '../api/memoApi';
@@ -15,6 +16,7 @@ const Memo = () => {
   const [icon, setIcon] = useState('');
   const dispatch = useDispatch();
   const memos = useSelector((state) => state.memo.value);
+  const [isStar, setIsStar] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -92,6 +94,20 @@ const Memo = () => {
     }
   };
 
+  const changeStar = async () => {
+    let temp = [...memos];
+    const index = temp.findIndex((e) => e._id === memoId);
+    const favorite = temp[index].favorite;
+    temp[index] = { ...temp[index], favorite: !favorite };
+    setIsStar(!favorite);
+    dispatch(setMemo(temp));
+    try {
+      await memoApi.update(memoId, { favorite: !favorite });
+    } catch (err) {
+      alert(err);
+    }
+    //##### 読み込み時にふぁぼの有無を取得していない
+  };
   return (
     <>
       <Box
@@ -101,8 +117,12 @@ const Memo = () => {
           width: '100%',
         }}
       >
-        <IconButton>
-          <StarBorderOutlinedIcon />
+        <IconButton onClick={changeStar}>
+          {isStar ? (
+            <StarIcon sx={{ color: '#FDDD28' }} />
+          ) : (
+            <StarBorderOutlinedIcon />
+          )}
         </IconButton>
         <IconButton variant="outlined" color="error" onClick={deleteMemo}>
           <DeleteOutlinedIcon />
