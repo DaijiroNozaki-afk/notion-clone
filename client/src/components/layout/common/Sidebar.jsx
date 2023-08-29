@@ -22,7 +22,7 @@ const Sidebar = () => {
   const { memoId } = useParams();
   const user = useSelector((state) => state.user.value);
   const memos = useSelector((state) => state.memo.value);
-
+  const favorite = memos.filter((e) => e.favorite === true);
   const logout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -101,6 +101,19 @@ const Sidebar = () => {
             </Typography>
           </Box>
         </ListItemButton>
+        {favorite.map((item, index) => (
+          <ListItemButton
+            sx={{ pl: '20px' }}
+            component={Link}
+            to={`/memo/${item._id}`}
+            key={item._id}
+            selected={index === activeIndex}
+          >
+            <Typography>
+              {item.icon} {item.title}
+            </Typography>
+          </ListItemButton>
+        ))}
         <Box sx={{ paddingTop: '10px' }}></Box>
         <ListItemButton>
           <Box
