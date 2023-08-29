@@ -26,7 +26,7 @@ const memoSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  favlritePosition: {
+  favoritePosition: {
     type: Number,
     default: 0,
   },
