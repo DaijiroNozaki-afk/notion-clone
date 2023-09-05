@@ -23,6 +23,7 @@ const Sidebar = () => {
   const { memoId } = useParams();
   const user = useSelector((state) => state.user.value);
   const memos = useSelector((state) => state.memo.value);
+  // console.log(memos);
   const favorite = memos.filter((e) => e.favorite === true);
   const logout = () => {
     localStorage.removeItem('token');
@@ -92,10 +93,25 @@ const Sidebar = () => {
     background: isDragging ? 'lightgreen' : 'grey',
     ...draggableStyle,
   });
+  const reloader = (list, startIndex, endIndex) => {
+    const removed = list.splice(startIndex, 1);
+    // console.log(removed);
+    list.splice(endIndex, 0, removed[0]);
+    return list;
+  };
   const [dndState, setDndState] = useState(items);
   // ドラッグ後に位置が変わっていた場合、順序入れ替えをする
   const onDragEnd = (result) => {
-    console.log(result);
+    // console.log(result);
+    if (!result.destination) {
+      return;
+    }
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+    const list = reloader(memos, result.source.index, result.destination.index);
+    // setDndState(list);
+    // console.log(dndState);
   };
   return (
     <Drawer
@@ -174,7 +190,7 @@ const Sidebar = () => {
             </IconButton>
           </Box>
         </ListItemButton>
-        {memos.map((item, index) => (
+        {/* {memos.map((item, index) => (
           <ListItemButton
             sx={{ pl: '20px' }}
             component={Link}
@@ -186,7 +202,7 @@ const Sidebar = () => {
               {item.icon} {item.title}
             </Typography>
           </ListItemButton>
-        ))}
+        ))} */}
         <ListItemButton>
           <Box>
             <Typography variant="body2" fontWeight="700">
@@ -203,8 +219,12 @@ const Sidebar = () => {
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
-                {dndState.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                {memos.map((item, index) => (
+                  <Draggable
+                    key={item._id}
+                    draggableId={item._id}
+                    index={index}
+                  >
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
@@ -215,7 +235,7 @@ const Sidebar = () => {
                           provided.draggableProps.style
                         )}
                       >
-                        {item.content}
+                        {item.icon} {item.title}
                       </div>
                     )}
                   </Draggable>
@@ -225,18 +245,6 @@ const Sidebar = () => {
             )}
           </Droppable>
         </DragDropContext>
-
-        {memos.map((item, index) => (
-          <ListItemButton
-            sx={{ pl: '20px' }}
-            component={Link}
-            to={`/memo/${item._id}`}
-            key={item._id}
-            selected={index === activeIndex}
-          >
-            <Typography>{/* {item.icon} {item.title} */}</Typography>
-          </ListItemButton>
-        ))}
       </List>
     </Drawer>
   );
