@@ -54,6 +54,17 @@ exports.update = async (req, res) => {
   }
 };
 
+exports.updatePosition = async (req, res) => {
+  console.log(req);
+  // for (const updateInfo of req.body) {
+  // }
+  try {
+    const memos = await Memo.find({ user: req.user._id }).sort('-position');
+    res.status(200).json(memos);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 exports.delete = async (req, res) => {
   const { memoId } = req.params;
   try {

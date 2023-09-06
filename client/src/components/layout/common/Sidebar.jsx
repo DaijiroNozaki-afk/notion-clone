@@ -94,10 +94,43 @@ const Sidebar = () => {
     ...draggableStyle,
   });
   const reloader = (list, startIndex, endIndex) => {
-    const removed = list.splice(startIndex, 1);
+    // list=memos は参照専用
+    //memoApi を使って順序を入れ替える必要がある
+    //memoApi に入れ替えたリストを保存する必要がある
+    //dispatchする
+    let newMemos = { ...list };
+    console.log(startIndex, endIndex);
+    console.log(newMemos);
+    let newPosition = [];
+    for (const property in newMemos) {
+      newPosition.push(newMemos[property].position);
+    }
+    // console.log(newPosition);
+    const removed = newPosition.splice(startIndex, 1);
+    newPosition.splice(endIndex, 0, removed[0]);
+    // console.log(newPosition);
+    for (const property in newMemos) {
+      // newMemos[property] = { position: newPosition[property] };
+      newMemos[property].position = newPosition[property];
+    }
+    console.log(newMemos);
+
+    // const newMemos = [res, ...memos];
+    // dispatch(setMemo(newMemos));
+    // let newPosition = newMemos.map((memo) => {
+    //   return memo;
+    // });
+
+    // console.log(newPosition);
+    // newMemos.map((value, index) => {
+    //   console.log(value, index);
+    // });
+    // const removed = newMemos.splice(startIndex, 1);
+    // newMemos.splice(endIndex, 0, removed[0]);
+    // dispatch(setMemo(newMemos));
+
     // console.log(removed);
-    list.splice(endIndex, 0, removed[0]);
-    return list;
+    // return list;
   };
   const [dndState, setDndState] = useState(items);
   // ドラッグ後に位置が変わっていた場合、順序入れ替えをする
