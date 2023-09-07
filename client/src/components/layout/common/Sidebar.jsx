@@ -93,27 +93,32 @@ const Sidebar = () => {
     background: isDragging ? 'lightgreen' : 'grey',
     ...draggableStyle,
   });
-  const reloader = (list, startIndex, endIndex) => {
+  const reloader = async (list, startIndex, endIndex) => {
     // list=memos は参照専用
     //memoApi を使って順序を入れ替える必要がある
     //memoApi に入れ替えたリストを保存する必要がある
     //dispatchする
-    let newMemos = { ...list };
-    console.log(startIndex, endIndex);
-    console.log(newMemos);
+    let newMemos = [...list];
     let newPosition = [];
-    for (const property in newMemos) {
-      newPosition.push(newMemos[property].position);
+    for (let prop in newMemos) {
+      newPosition.push(newMemos[prop].position);
     }
-    // console.log(newPosition);
-    const removed = newPosition.splice(startIndex, 1);
-    newPosition.splice(endIndex, 0, removed[0]);
-    // console.log(newPosition);
-    for (const property in newMemos) {
-      // newMemos[property] = { position: newPosition[property] };
-      newMemos[property].position = newPosition[property];
+    const removedPosition = newPosition.splice(startIndex, 1);
+    newPosition.splice(endIndex, 0, removedPosition[0]);
+    //position の入れ替え
+    const updateMemo = [];
+    for (let prop in newMemos) {
+      updateMemo[prop] = { ...newMemos[prop], position: newPosition[prop] };
+      newMemos[prop] = updateMemo[prop];
     }
-    console.log(newMemos);
+
+    try {
+      const res = await memoApi.updatePosition(newMemos);
+      dispatch(setMemo(res));
+    } catch (err) {
+      alert(err);
+    }
+    // dispatch(setMemo(newMemos));
 
     // const newMemos = [res, ...memos];
     // dispatch(setMemo(newMemos));
@@ -125,6 +130,7 @@ const Sidebar = () => {
     // newMemos.map((value, index) => {
     //   console.log(value, index);
     // });
+    console.log(newMemos);
     // const removed = newMemos.splice(startIndex, 1);
     // newMemos.splice(endIndex, 0, removed[0]);
     // dispatch(setMemo(newMemos));

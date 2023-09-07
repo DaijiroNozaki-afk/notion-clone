@@ -55,11 +55,18 @@ exports.update = async (req, res) => {
 };
 
 exports.updatePosition = async (req, res) => {
-  console.log(req);
-  // for (const updateInfo of req.body) {
-  // }
+  // 変更したposition ごと、memoId に上書き保存する
   try {
+    for (const updateInfo of req.body) {
+      // console.log(i, updateInfo._id, updateInfo.position);
+
+      const updatedMemo = await Memo.findByIdAndUpdate(updateInfo._id, {
+        $set: updateInfo,
+      });
+    }
+    //ログイン中のユーザーのメモを全て取得
     const memos = await Memo.find({ user: req.user._id }).sort('-position');
+
     res.status(200).json(memos);
   } catch (err) {
     res.status(500).json(err);
