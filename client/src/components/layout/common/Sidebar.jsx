@@ -82,15 +82,12 @@ const Sidebar = () => {
   const grid = 8;
   const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? 'lightblue' : 'lightgrey',
-    width: '250px',
-    padding: grid,
   });
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     useSelect: 'none',
-    padding: grid * 2,
     margin: `0 0 ${grid} 0`,
-    background: isDragging ? 'lightgreen' : 'grey',
+    background: isDragging ? 'lightgreen' : 'white',
     ...draggableStyle,
   });
   const reloader = async (list, startIndex, endIndex) => {
@@ -103,45 +100,27 @@ const Sidebar = () => {
     for (let prop in newMemos) {
       newPosition.push(newMemos[prop].position);
     }
-    const removedPosition = newPosition.splice(startIndex, 1);
-    newPosition.splice(endIndex, 0, removedPosition[0]);
+    //endIndex とstartIndex の処理が逆になっているが
+    //position の並び順が降順になっているので移動先のデータを抜いて移動元に追加する必要がある
+    const removedPosition = newPosition.splice(endIndex, 1);
+    newPosition.splice(startIndex, 0, removedPosition[0]);
     //position の入れ替え
     const updateMemo = [];
     for (let prop in newMemos) {
       updateMemo[prop] = { ...newMemos[prop], position: newPosition[prop] };
       newMemos[prop] = updateMemo[prop];
     }
-
+    // console.log(newMemos);
     try {
       const res = await memoApi.updatePosition(newMemos);
       dispatch(setMemo(res));
     } catch (err) {
       alert(err);
     }
-    // dispatch(setMemo(newMemos));
-
-    // const newMemos = [res, ...memos];
-    // dispatch(setMemo(newMemos));
-    // let newPosition = newMemos.map((memo) => {
-    //   return memo;
-    // });
-
-    // console.log(newPosition);
-    // newMemos.map((value, index) => {
-    //   console.log(value, index);
-    // });
-    console.log(newMemos);
-    // const removed = newMemos.splice(startIndex, 1);
-    // newMemos.splice(endIndex, 0, removed[0]);
-    // dispatch(setMemo(newMemos));
-
-    // console.log(removed);
-    // return list;
   };
   const [dndState, setDndState] = useState(items);
   // ドラッグ後に位置が変わっていた場合、順序入れ替えをする
   const onDragEnd = (result) => {
-    // console.log(result);
     if (!result.destination) {
       return;
     }
@@ -149,8 +128,6 @@ const Sidebar = () => {
       return;
     }
     const list = reloader(memos, result.source.index, result.destination.index);
-    // setDndState(list);
-    // console.log(dndState);
   };
   return (
     <Drawer
@@ -229,19 +206,6 @@ const Sidebar = () => {
             </IconButton>
           </Box>
         </ListItemButton>
-        {/* {memos.map((item, index) => (
-          <ListItemButton
-            sx={{ pl: '20px' }}
-            component={Link}
-            to={`/memo/${item._id}`}
-            key={item._id}
-            selected={index === activeIndex}
-          >
-            <Typography>
-              {item.icon} {item.title}
-            </Typography>
-          </ListItemButton>
-        ))} */}
         <ListItemButton>
           <Box>
             <Typography variant="body2" fontWeight="700">
@@ -274,7 +238,17 @@ const Sidebar = () => {
                           provided.draggableProps.style
                         )}
                       >
-                        {item.icon} {item.title}
+                        <ListItemButton
+                          sx={{ pl: '20px' }}
+                          component={Link}
+                          to={`/memo/${item._id}`}
+                          key={item._id}
+                          selected={index === activeIndex}
+                        >
+                          <Typography>
+                            {item.icon} {item.title}
+                          </Typography>
+                        </ListItemButton>
                       </div>
                     )}
                   </Draggable>
