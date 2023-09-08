@@ -28,7 +28,6 @@ const memoSchema = new Schema({
   },
   favoritePosition: {
     type: Number,
-    default: 0,
   },
 });
 
