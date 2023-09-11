@@ -25,6 +25,16 @@ exports.getAll = async (req, res) => {
     res.status(500).json(err);
   }
 };
+exports.getFavoriteAll = async (req, res) => {
+  try {
+    const memos = await Memo.find({ user: req.user._id, favorite: true }).sort(
+      '-favoritePosition'
+    );
+    res.status(200).json(memos);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 
 exports.getOne = async (req, res) => {
   const { memoId } = req.params;
@@ -92,6 +102,27 @@ exports.updatePosition = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+exports.updateFavoritePosition = async (req, res) => {
+  // 変更したfavoritePosition ごと、memoId に上書き保存する
+  try {
+    for (const updateInfo of req.body) {
+      // console.log(i, updateInfo._id, updateInfo.favoritePosition);
+
+      const updatedMemo = await Memo.findByIdAndUpdate(updateInfo._id, {
+        $set: updateInfo,
+      });
+    }
+    //ログイン中のユーザーのお気に入りのメモを全て取得
+    const memos = await Memo.find({ user: req.user._id, favorite: true }).sort(
+      '-favoritePosition'
+    );
+    res.status(200).json(memos);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 exports.delete = async (req, res) => {
   const { memoId } = req.params;
   try {

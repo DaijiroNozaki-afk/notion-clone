@@ -41,10 +41,10 @@ const Memo = () => {
     clearTimeout(timer);
     const newTitle = e.target.value;
     setTitle(newTitle);
-    // タイトル変更を行ったら、Sidebar のタイトルも更新する、dispatch する
     timer = setTimeout(async () => {
       try {
         await memoApi.update(memoId, { title: newTitle });
+        // タイトル変更を行ったら、Sidebar のタイトルも更新する、dispatch する
         const res = await memoApi.getAll();
         dispatch(setMemo(res));
       } catch (err) {
@@ -106,6 +106,9 @@ const Memo = () => {
     dispatch(setMemo(temp));
     try {
       await memoApi.update(memoId, { favorite: !favorite });
+      // favorite ボタンを押したら、dispatch する
+      const res = await memoApi.getAll();
+      dispatch(setMemo(res));
     } catch (err) {
       alert(err);
     }
