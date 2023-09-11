@@ -162,6 +162,8 @@ const Memo = () => {
             value={description}
             placeholder="追加"
             variant="outlined"
+            multiline
+            rows={4}
             fullWidth
             sx={{
               '.MuiOutlinedInput-input': { padding: 0 },
