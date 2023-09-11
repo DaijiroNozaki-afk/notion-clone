@@ -41,10 +41,12 @@ const Memo = () => {
     clearTimeout(timer);
     const newTitle = e.target.value;
     setTitle(newTitle);
-
+    // タイトル変更を行ったら、Sidebar のタイトルも更新する、dispatch する
     timer = setTimeout(async () => {
       try {
         await memoApi.update(memoId, { title: newTitle });
+        const res = await memoApi.getAll();
+        dispatch(setMemo(res));
       } catch (err) {
         alert('updateTimer ' + err);
       }

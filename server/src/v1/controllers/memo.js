@@ -3,10 +3,13 @@ const Memo = require('../models/memo');
 exports.create = async (req, res) => {
   try {
     const memoCount = await Memo.find().count();
+    //position の最大値を取得する
+    const memos = await Memo.find({ user: req.user._id }).sort('-position');
     //メモ新規作成
     const memo = await Memo.create({
       user: req.user._id,
-      position: memoCount > 0 ? memoCount : 0,
+      // position: memoCount > 0 ? memoCount : 0,
+      position: memos[0] !== undefined ? memos[0].position + 1 : 0,
     });
     res.status(201).json(memo);
   } catch (err) {
@@ -44,24 +47,17 @@ exports.update = async (req, res) => {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
     if (!memo) return res.status(404).json('メモが存在しません。');
     //favoritePosition の最大値を取得する
-    const favorites = await Memo.find({ favorite: true });
-    //favorite に対して降順で入れ替え
-    favorites.sort((a, b) => {
-      if (a.favoritePosition > b.favoritePosition) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
+    const favorites = await Memo.find({ favorite: true }).sort(
+      '-favoritePosition'
+    );
     //favoritePosition の最大値を取る
     // console.log(favorites[0].favoritePosition);
     // この修正は数字が重複するpositionにも加える必要がある
 
-    const favoriteCount = await Memo.find({ favorite: true }).count();
     //favorite がtrue なら、favoritePosition を追加する
     if (favorite) {
       req.body.favoritePosition =
-        favoriteCount > 0 ? favorites[0].favoritePosition + 1 : 0;
+        favorites[0] !== undefined ? favorites[0].favoritePosition + 1 : 0;
     } else if (!favorite) {
       //favorite がfalse なら、favoritePosition を削除する
       req.body.favoritePosition = '';
