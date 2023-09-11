@@ -19,6 +19,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeFavoriteIndex, setActiveFavoriteIndex] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { memoId } = useParams();
@@ -49,6 +50,10 @@ const Sidebar = () => {
   useEffect(() => {
     const activeIndex = memos.findIndex((e) => e._id === memoId);
     setActiveIndex(activeIndex);
+    const activeFavoriteIndex = favoriteMemos.findIndex(
+      (e) => e._id === memoId
+    );
+    setActiveFavoriteIndex(activeFavoriteIndex);
   }, [[navigate, dispatch]]);
 
   const addMemo = async () => {
@@ -200,20 +205,6 @@ const Sidebar = () => {
             </Typography>
           </Box>
         </ListItemButton>
-        {/* {favoriteMemos.map((item, index) => (
-          <ListItemButton
-            sx={{ pl: '20px' }}
-            component={Link}
-            to={`/memo/${item._id}`}
-            key={item._id}
-            selected={index === activeIndex}
-          >
-            <Typography>
-              {item.icon} {item.title}
-            </Typography>
-          </ListItemButton>
-        ))} */}
-
         <DragDropContext onDragEnd={onFavoriteDragEnd}>
           <Droppable droppableId="favoriteDroppable">
             {(provided, snapshot) => (
@@ -243,7 +234,7 @@ const Sidebar = () => {
                           component={Link}
                           to={`/memo/${item._id}`}
                           key={item._id}
-                          selected={index === activeIndex}
+                          selected={index === activeFavoriteIndex}
                         >
                           <Typography>
                             {item.icon} {item.title}
