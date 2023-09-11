@@ -49,7 +49,7 @@ exports.getOne = async (req, res) => {
 
 exports.update = async (req, res) => {
   const { memoId } = req.params;
-  const { title, description, favorite, favoritePosition } = req.body;
+  const { title, description, favorite } = req.body;
   try {
     if (title === '') req.body.title = '無題';
     if (description === '')
@@ -65,10 +65,10 @@ exports.update = async (req, res) => {
     // この修正は数字が重複するpositionにも加える必要がある
 
     //favorite がtrue なら、favoritePosition を追加する
-    if (favorite) {
+    if (favorite === true) {
       req.body.favoritePosition =
         favorites[0] !== undefined ? favorites[0].favoritePosition + 1 : 0;
-    } else if (!favorite) {
+    } else if (favorite === false) {
       //favorite がfalse なら、favoritePosition を削除する
       req.body.favoritePosition = '';
     }

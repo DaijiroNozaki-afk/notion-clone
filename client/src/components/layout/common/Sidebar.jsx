@@ -276,13 +276,6 @@ const Sidebar = () => {
             </IconButton>
           </Box>
         </ListItemButton>
-        <ListItemButton>
-          <Box>
-            <Typography variant="body2" fontWeight="700">
-              DND
-            </Typography>
-          </Box>
-        </ListItemButton>
 
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable">

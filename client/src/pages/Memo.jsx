@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import memoApi from '../api/memoApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMemo } from '../redux/features/memoSlice';
+import { setFavorite } from '../redux/features/favoriteSlice';
 import EmojiPicker from '../components/layout/common/EmojiPicker';
 
 const Memo = () => {
@@ -16,6 +17,7 @@ const Memo = () => {
   const [icon, setIcon] = useState('');
   const dispatch = useDispatch();
   const memos = useSelector((state) => state.memo.value);
+  const favoriteMemos = useSelector((state) => state.favoriteMemo.value);
   const [isStar, setIsStar] = useState(false);
   const navigate = useNavigate();
 
@@ -47,6 +49,8 @@ const Memo = () => {
         // タイトル変更を行ったら、Sidebar のタイトルも更新する、dispatch する
         const res = await memoApi.getAll();
         dispatch(setMemo(res));
+        const resFavorite = await memoApi.getFavoriteAll();
+        dispatch(setFavorite(resFavorite));
       } catch (err) {
         alert('updateTimer ' + err);
       }
@@ -90,6 +94,11 @@ const Memo = () => {
     temp[index] = { ...temp[index], icon: newIcon };
     setIcon(newIcon);
     dispatch(setMemo(temp));
+    // Sidebar のfavorite も更新する
+    let favoTemp = [...favoriteMemos];
+    const favoIndex = favoTemp.findIndex((e) => e._id === memoId);
+    favoTemp[favoIndex] = { ...favoTemp[favoIndex], icon: newIcon };
+    dispatch(setFavorite(favoTemp));
     try {
       await memoApi.update(memoId, { icon: newIcon });
     } catch (err) {
@@ -107,8 +116,8 @@ const Memo = () => {
     try {
       await memoApi.update(memoId, { favorite: !favorite });
       // favorite ボタンを押したら、dispatch する
-      const res = await memoApi.getAll();
-      dispatch(setMemo(res));
+      const resFavorite = await memoApi.getFavoriteAll();
+      dispatch(setFavorite(resFavorite));
     } catch (err) {
       alert(err);
     }
