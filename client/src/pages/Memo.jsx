@@ -1,4 +1,12 @@
-import { Box, IconButton, TextField } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import StarIcon from '@mui/icons-material/Star';
@@ -150,18 +158,28 @@ const Memo = () => {
           <EmojiPicker icon={icon} onChange={onIconChange} />
           <TextField
             onChange={updateTitle}
+            label={'題名'}
             value={title}
             placeholder="無題"
             variant="outlined"
             fullWidth
             sx={{
               '.MuiOutlinedInput-input': { padding: 0 },
-              '.MuiOutlinedInput-notchedOutline': { border: 'none' },
-              '.MuiOutlinedInput-root': { fontSize: '2rem', fontWeight: '700' },
+              '.MuiOutlinedInput-notchedOutline': {
+                border: 'none',
+              },
+              '.MuiOutlinedInput-root': {
+                fontSize: '2rem',
+                fontWeight: '700',
+              },
+              'MuiFormLabel-root': {
+                marginTop: '100px',
+              },
             }}
           />
           <TextField
             onChange={updateDescription}
+            label={'本文'}
             value={description}
             placeholder="追加"
             variant="outlined"
@@ -175,6 +193,44 @@ const Memo = () => {
             }}
           />
         </Box>
+      </Box>
+      <h3>ストーリーの核</h3>
+      <Box>
+        <h4>発見</h4>
+        <TextField />
+        <h4>継承</h4>
+        <TextField />
+        <h4>法則</h4>
+        <TextField />
+      </Box>
+      <h3>ストーリー</h3>
+      <Box>
+        <h4>始まり：連想からの逸脱</h4>
+        <TextField />
+        <h4>順序：反論する</h4>
+        <TextField />
+        <h4>終わり：結論付ける</h4>
+        <TextField />
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">解決方法</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={'解決'}
+            label="Age"
+            // onChange={handleChange}
+          >
+            <MenuItem value={'感情的な解決'}>感情的な解決</MenuItem>
+            <MenuItem value={'乗り越えと共感原則の解決'}>
+              乗り越えと共感原則の解決
+            </MenuItem>
+            <MenuItem value={'論理的な解決'}>論理的な解決</MenuItem>
+            <MenuItem value={'律法(習慣)的な解決'}>律法(習慣)的な解決</MenuItem>
+            <MenuItem value={'諧謔的(ユーモア)な解決'}>
+              諧謔的(ユーモア)な解決
+            </MenuItem>
+          </Select>
+        </FormControl>
       </Box>
     </>
   );

@@ -77,6 +77,32 @@ const Sidebar = () => {
     background: isDragging ? 'lightgreen' : 'white',
     ...draggableStyle,
   });
+  //降順のfavoritePositionソート
+  const descFavoritePositionSort = (props) => {
+    const sorted = props.sort((a, b) => {
+      if (a.favoritePosition < b.favoritePosition) {
+        return 1;
+      }
+      if (a.favoritePosition > b.favoritePosition) {
+        return -1;
+      }
+      return 0;
+    });
+    return sorted;
+  };
+  //降順のpositionソート
+  const descPositionSort = (props) => {
+    const sorted = props.sort((a, b) => {
+      if (a.position < b.position) {
+        return 1;
+      }
+      if (a.position > b.position) {
+        return -1;
+      }
+      return 0;
+    });
+    return sorted;
+  };
   const favoriteReloader = async (list, startIndex, endIndex) => {
     let newMemos = [...list];
     let newPosition = []; //取得したメモの位置を一時保存
@@ -107,32 +133,6 @@ const Sidebar = () => {
     } catch (err) {
       alert(err);
     }
-  };
-  //降順のfavoritePositionソート
-  const descFavoritePositionSort = (props) => {
-    const sorted = props.sort((a, b) => {
-      if (a.favoritePosition < b.favoritePosition) {
-        return 1;
-      }
-      if (a.favoritePosition > b.favoritePosition) {
-        return -1;
-      }
-      return 0;
-    });
-    return sorted;
-  };
-  //降順のpositionソート
-  const descPositionSort = (props) => {
-    const sorted = props.sort((a, b) => {
-      if (a.position < b.position) {
-        return 1;
-      }
-      if (a.position > b.position) {
-        return -1;
-      }
-      return 0;
-    });
-    return sorted;
   };
   const reloader = async (list, startIndex, endIndex) => {
     // list=memos は参照専用
