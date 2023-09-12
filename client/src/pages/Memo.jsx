@@ -74,7 +74,7 @@ const Memo = () => {
   const deleteMemo = async () => {
     try {
       const deletedMemo = await memoApi.delete(memoId);
-      console.log(deletedMemo);
+      // console.log(deletedMemo);
 
       const newMemos = memos.filter((e) => e._id !== memoId);
       if (newMemos.length === 0) {
@@ -83,6 +83,9 @@ const Memo = () => {
         navigate(`/memo/${newMemos[0]._id}`);
       }
       dispatch(setMemo(newMemos));
+      //お気に入りの処理
+      const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
+      dispatch(setFavorite(newFavoriteMemos));
     } catch (err) {
       alert('deleteMemo' + err);
     }

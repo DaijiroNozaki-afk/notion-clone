@@ -98,14 +98,41 @@ const Sidebar = () => {
       newMemos[prop] = updateMemo[prop];
     }
     // console.log(newMemos);
+    //並び変えたメモを受け取ってdispatch する
+    newMemos = descFavoritePositionSort(newMemos);
+    dispatch(setFavorite(newMemos));
     // position を入れ替えたメモをNode.js に渡してデータベースを更新する
     try {
       const res = await memoApi.updateFavoritePosition(newMemos);
-      //並び変えたメモを受け取ってdispatch する
-      dispatch(setFavorite(res));
     } catch (err) {
       alert(err);
     }
+  };
+  //降順のfavoritePositionソート
+  const descFavoritePositionSort = (props) => {
+    const sorted = props.sort((a, b) => {
+      if (a.favoritePosition < b.favoritePosition) {
+        return 1;
+      }
+      if (a.favoritePosition > b.favoritePosition) {
+        return -1;
+      }
+      return 0;
+    });
+    return sorted;
+  };
+  //降順のpositionソート
+  const descPositionSort = (props) => {
+    const sorted = props.sort((a, b) => {
+      if (a.position < b.position) {
+        return 1;
+      }
+      if (a.position > b.position) {
+        return -1;
+      }
+      return 0;
+    });
+    return sorted;
   };
   const reloader = async (list, startIndex, endIndex) => {
     // list=memos は参照専用
@@ -127,11 +154,12 @@ const Sidebar = () => {
       updateMemo[prop] = { ...newMemos[prop], position: newPosition[prop] };
       newMemos[prop] = updateMemo[prop];
     }
+    newMemos = descPositionSort(newMemos);
+    dispatch(setMemo(newMemos));
+
     //position を入れ替えたメモをNode.js に渡してデータベースを更新する
     try {
       const res = await memoApi.updatePosition(newMemos);
-      //並び変えたメモを受け取ってdispatch する
-      dispatch(setMemo(res));
     } catch (err) {
       alert(err);
     }
