@@ -95,7 +95,7 @@ const Memo = () => {
       const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
       dispatch(setFavorite(newFavoriteMemos));
     } catch (err) {
-      alert('deleteMemo' + err);
+      alert('deleteMemo ' + err);
     }
   };
 
@@ -113,7 +113,7 @@ const Memo = () => {
     try {
       await memoApi.update(memoId, { icon: newIcon });
     } catch (err) {
-      alert(err);
+      alert('onIconChange ' + err);
     }
   };
 
@@ -130,18 +130,21 @@ const Memo = () => {
       const resFavorite = await memoApi.getFavoriteAll();
       dispatch(setFavorite(resFavorite));
     } catch (err) {
-      alert(err);
+      alert('changeStar ' + err);
     }
   };
+
+  const getTextFieldStyle = () => ({
+    '.MuiOutlinedInput-input': { padding: 0 },
+    '.MuiOutlinedInput-root': {
+      width: '100%',
+      fontSize: '0.7rem',
+    },
+    width: '100%',
+  });
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
+      <Box>
         <IconButton onClick={changeStar}>
           {isStar ? (
             <StarIcon sx={{ color: '#FDDD28' }} />
@@ -172,9 +175,6 @@ const Memo = () => {
                 fontSize: '2rem',
                 fontWeight: '700',
               },
-              'MuiFormLabel-root': {
-                marginTop: '100px',
-              },
             }}
           />
           <TextField
@@ -195,42 +195,101 @@ const Memo = () => {
         </Box>
       </Box>
       <h3>ストーリーの核</h3>
-      <Box>
-        <h4>発見</h4>
-        <TextField />
-        <h4>継承</h4>
-        <TextField />
-        <h4>法則</h4>
-        <TextField />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-around',
+        }}
+      >
+        <Box sx={{ width: 'calc(100%/3)' }}>
+          <h4 style={{ width: '100%' }}>発見</h4>
+          <TextField
+            value={
+              '瞬く華(はな)火(び)、夜空(よぞら)彩(いろど)る輝(かがや)き心躍(こころおど)る、祭(まつ)の風(かぜ)に吹(ふ)かれて'
+            }
+            multiline
+            sx={getTextFieldStyle()}
+          />
+        </Box>
+        <Box sx={{ width: 'calc(100%/3)' }}>
+          <h4>継承</h4>
+          <TextField
+            value={
+              '輝(かがや)く星(ほし)のように舞(ま)い上(あ)がる感動(かんどう)と喜(よろこ)び、胸(むね)に秘(ひ)めて'
+            }
+            multiline
+            sx={getTextFieldStyle()}
+          />
+        </Box>
+        <Box sx={{ width: 'calc(100%/3)' }}>
+          <h4>法則</h4>
+          <TextField
+            value={
+              '一(ひと)ときの幻(まぼろし)、夢(ゆめ)のような花(はな)火(び)の美(うつく)しさ、言葉(ことば)に詰(つ)まらず'
+            }
+            multiline
+            sx={getTextFieldStyle()}
+          />
+        </Box>
       </Box>
       <h3>ストーリー</h3>
-      <Box>
-        <h4>始まり：連想からの逸脱</h4>
-        <TextField />
-        <h4>順序：反論する</h4>
-        <TextField />
-        <h4>終わり：結論付ける</h4>
-        <TextField />
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">解決方法</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={'解決'}
-            label="Age"
-            // onChange={handleChange}
-          >
-            <MenuItem value={'感情的な解決'}>感情的な解決</MenuItem>
-            <MenuItem value={'乗り越えと共感原則の解決'}>
-              乗り越えと共感原則の解決
-            </MenuItem>
-            <MenuItem value={'論理的な解決'}>論理的な解決</MenuItem>
-            <MenuItem value={'律法(習慣)的な解決'}>律法(習慣)的な解決</MenuItem>
-            <MenuItem value={'諧謔的(ユーモア)な解決'}>
-              諧謔的(ユーモア)な解決
-            </MenuItem>
-          </Select>
-        </FormControl>
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <Box>
+          <h4>始まり：連想からの逸脱</h4>
+          <TextField
+            value={
+              '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
+            }
+            sx={getTextFieldStyle()}
+          />
+        </Box>
+        <Box>
+          <h4>順序：反論する</h4>
+          <TextField
+            value={
+              '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
+            }
+            sx={getTextFieldStyle()}
+          />
+        </Box>
+        <Box>
+          <h4>終わり：結論付ける</h4>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">解決方法</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={'解決'}
+              label="Age"
+              // onChange={handleChange}
+            >
+              <MenuItem value={'感情的な解決'}>感情的な解決</MenuItem>
+              <MenuItem value={'乗り越えと共感原則の解決'}>
+                乗り越えと共感原則の解決
+              </MenuItem>
+              <MenuItem value={'論理的な解決'}>論理的な解決</MenuItem>
+              <MenuItem value={'律法(習慣)的な解決'}>
+                律法(習慣)的な解決
+              </MenuItem>
+              <MenuItem value={'諧謔的(ユーモア)な解決'}>
+                諧謔的(ユーモア)な解決
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            value={
+              '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
+            }
+            sx={getTextFieldStyle()}
+          />
+        </Box>
       </Box>
     </>
   );

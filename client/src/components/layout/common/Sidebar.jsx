@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -40,7 +41,7 @@ const Sidebar = () => {
         const resFavorite = await memoApi.getFavoriteAll();
         dispatch(setFavorite(resFavorite));
       } catch (err) {
-        alert(err);
+        alert('getMemos' + err);
       }
     };
     getMemos();
@@ -63,7 +64,7 @@ const Sidebar = () => {
       dispatch(setMemo(newMemos));
       navigate(`memo/${res._id}`);
     } catch (err) {
-      alert(err);
+      alert('addMemo ' + err);
     }
   };
   const grid = 8;
@@ -131,7 +132,7 @@ const Sidebar = () => {
     try {
       const res = await memoApi.updateFavoritePosition(newMemos);
     } catch (err) {
-      alert(err);
+      alert('favoriteReloader ' + err);
     }
   };
   const reloader = async (list, startIndex, endIndex) => {
@@ -161,7 +162,7 @@ const Sidebar = () => {
     try {
       const res = await memoApi.updatePosition(newMemos);
     } catch (err) {
-      alert(err);
+      alert('reloader ' + err);
     }
   };
 
@@ -277,7 +278,11 @@ const Sidebar = () => {
             )}
           </Droppable>
         </DragDropContext>
-        <Box sx={{ paddingTop: '10px' }}></Box>
+        <Divider
+          sx={{
+            margin: '10px 0',
+          }}
+        />
         <ListItemButton>
           <Box
             sx={{

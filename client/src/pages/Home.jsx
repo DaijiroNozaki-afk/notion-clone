@@ -14,7 +14,7 @@ const Home = () => {
       // console.log(res);
       Navigate(`/memo/${res._id}`);
     } catch (err) {
-      alert(err);
+      alert('Home ' + err);
     } finally {
       setLoading(false);
     }
