@@ -1,10 +1,12 @@
 import {
   Box,
+  Button,
   FormControl,
   IconButton,
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
   TextField,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -17,24 +19,80 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setMemo } from '../redux/features/memoSlice';
 import { setFavorite } from '../redux/features/favoriteSlice';
 import EmojiPicker from '../components/layout/common/EmojiPicker';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Memo = () => {
   const { memoId } = useParams();
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  // const [description, setDescription] = useState('');
+  // const [discovery, setDiscovery] = useState('');
+  // const [inheritance, setInheritance] = useState('');
+  // const [storyRule, setStoryRule] = useState('');
+  // const [startStory, setStartStory] = useState('');
+  // const [orderStory, setOrderStory] = useState('');
+  // const [endStory, setEndStory] = useState('');
+  // const [solution, setSolution] = useState('');
+  const [formData, setFormData] = useState({
+    description: '',
+    discovery: '',
+    inheritance: '',
+    storyRule: '',
+    startStory: '',
+    orderStory: '',
+    endStory: '',
+    solution: '',
+  });
+
   const [icon, setIcon] = useState('');
   const dispatch = useDispatch();
   const memos = useSelector((state) => state.memo.value);
   const favoriteMemos = useSelector((state) => state.favoriteMemo.value);
   const [isStar, setIsStar] = useState(false);
   const navigate = useNavigate();
+  // const [openSnack, setOpenSnack] = useState(false);
+  const [openSnack, setOpenSnack] = useState({
+    isOpen: false,
+    message: '',
+  });
+
+  const handleClick = (props) => {
+    setOpenSnack({ ...openSnack, isOpen: true, message: props });
+  };
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnack({ ...openSnack, isOpen: false, message: '' });
+  };
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
 
   useEffect(() => {
     const getMemo = async () => {
       try {
         const res = await memoApi.getOne(memoId);
         setTitle(res.title);
-        setDescription(res.description);
+        setFormData({
+          ...formData,
+          description: res.description,
+          discovery: res.discovery,
+          inheritance: res.inheritance,
+          storyRule: res.storyRule,
+          startStory: res.startStory,
+          orderStory: res.orderStory,
+          endStory: res.endStory,
+          solution: res.solution,
+        });
         setIcon(res.icon);
         setIsStar(res.favorite);
       } catch (err) {
@@ -65,26 +123,81 @@ const Memo = () => {
     }, timeout);
   };
 
-  const updateDescription = async (e) => {
+  // const updateDescription = async (e) => {
+  //   clearTimeout(timer);
+  //   const newDescription = e.target.value;
+  //   setDescription(newDescription);
+
+  //   timer = setTimeout(async () => {
+  //     try {
+  //       await memoApi.update(memoId, { description: newDescription });
+  //     } catch (err) {
+  //       alert('updateDescription ' + err);
+  //     }
+  //   }, timeout);
+  // };
+  // const updateDiscover = async (e) => {
+  //   clearTimeout(timer);
+  //   const newDiscover = e.target.value;
+  //   setDiscover(newDiscover);
+
+  //   timer = setTimeout(async () => {
+  //     try {
+  //       await memoApi.update(memoId, { discover: newDiscover });
+  //     } catch (err) {
+  //       alert('updateDiscover ' + err);
+  //     }
+  //   }, timeout);
+  // };
+
+  const updateField = async (e, fieldName) => {
     clearTimeout(timer);
-    const newDescription = e.target.value;
-    setDescription(newDescription);
+    const newValue = e.target.value;
+    setFormData({ ...formData, [fieldName]: newValue });
 
     timer = setTimeout(async () => {
       try {
-        await memoApi.update(memoId, { description: newDescription });
+        const updateData = {};
+        updateData[fieldName] = newValue;
+        await memoApi.update(memoId, updateData);
       } catch (err) {
-        alert('updateDescription ' + err);
+        alert(`update${fieldName} ${err}`);
       }
     }, timeout);
   };
 
-  const deleteMemo = async () => {
-    try {
-      const deletedMemo = await memoApi.delete(memoId);
-      // console.log(deletedMemo);
+  const updateDescription = (e) => {
+    updateField(e, 'description');
+  };
 
+  const updateDiscovery = (e) => {
+    updateField(e, 'discovery');
+  };
+  const updateInheritance = (e) => {
+    updateField(e, 'inheritance');
+  };
+  const updateStoryRule = (e) => {
+    updateField(e, 'storyRule');
+  };
+  const updateStartStory = (e) => {
+    updateField(e, 'startStory');
+  };
+  const updateOrderStory = (e) => {
+    updateField(e, 'orderStory');
+  };
+  const updateEndStory = (e) => {
+    updateField(e, 'endStory');
+  };
+  const updateSolution = (e) => {
+    updateField(e, 'solution');
+  };
+
+  const deleteMemo = async () => {
+    const memoTitle = title;
+    try {
+      await memoApi.delete(memoId);
       const newMemos = memos.filter((e) => e._id !== memoId);
+      handleClick(memoTitle + ' を削除しました');
       if (newMemos.length === 0) {
         navigate('/memo');
       } else {
@@ -183,7 +296,7 @@ const Memo = () => {
           <TextField
             onChange={updateDescription}
             label={'本文'}
-            value={description}
+            value={formData.description}
             placeholder="追加"
             variant="outlined"
             multiline
@@ -207,9 +320,8 @@ const Memo = () => {
         <Box sx={getCoreTextFieldStyle}>
           <h4 style={{ width: '100%' }}>発見</h4>
           <TextField
-            value={
-              '瞬く華(はな)火(び)、夜空(よぞら)彩(いろど)る輝(かがや)き心躍(こころおど)る、祭(まつ)の風(かぜ)に吹(ふ)かれて'
-            }
+            value={formData.discovery}
+            onChange={updateDiscovery}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -217,9 +329,8 @@ const Memo = () => {
         <Box sx={getCoreTextFieldStyle}>
           <h4>継承</h4>
           <TextField
-            value={
-              '輝(かがや)く星(ほし)のように舞(ま)い上(あ)がる感動(かんどう)と喜(よろこ)び、胸(むね)に秘(ひ)めて'
-            }
+            value={formData.inheritance}
+            onChange={updateInheritance}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -227,9 +338,8 @@ const Memo = () => {
         <Box sx={getCoreTextFieldStyle}>
           <h4>法則</h4>
           <TextField
-            value={
-              '一(ひと)ときの幻(まぼろし)、夢(ゆめ)のような花(はな)火(び)の美(うつく)しさ、言葉(ことば)に詰(つ)まらず'
-            }
+            value={formData.storyRule}
+            onChange={updateStoryRule}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -241,9 +351,8 @@ const Memo = () => {
         <Box>
           <h4>始まり：連想からの逸脱</h4>
           <TextField
-            value={
-              '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
-            }
+            value={formData.startStory}
+            onChange={updateStartStory}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -251,9 +360,8 @@ const Memo = () => {
         <Box>
           <h4>順序：反論する</h4>
           <TextField
-            value={
-              '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
-            }
+            value={formData.orderStory}
+            onChange={updateOrderStory}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -265,13 +373,12 @@ const Memo = () => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={'解決方法を選んでください'}
-              label="Age"
+              value={formData.solution}
+              onChange={updateSolution}
+              label="選択してください"
               // onChange={handleChange}
             >
-              <MenuItem value={'解決方法を選んでください'}>
-                解決方法を選んでください
-              </MenuItem>
+              <MenuItem value={'選択してください'}>選択してください</MenuItem>
               <MenuItem value={'感情的な解決'}>感情的な解決</MenuItem>
               <MenuItem value={'乗り越えと共感原則の解決'}>
                 乗り越えと共感原則の解決
@@ -286,13 +393,22 @@ const Memo = () => {
             </Select>
           </FormControl>
           <TextField
-            value={
-              '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
-            }
+            value={formData.endStory}
+            onChange={updateEndStory}
             multiline
             sx={getTextFieldStyle()}
           />
         </Box>
+      </Box>
+      <Box>
+        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
+        <Snackbar
+          open={openSnack.isOpen}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message={openSnack.message}
+          action={action}
+        />
       </Box>
     </>
   );

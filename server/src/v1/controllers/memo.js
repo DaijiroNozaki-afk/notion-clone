@@ -56,13 +56,10 @@ exports.update = async (req, res) => {
       req.body.description = 'ここに自由に記入してください。';
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
     if (!memo) return res.status(404).json('メモが存在しません。');
-    //favoritePosition の最大値を取得する
+    //favoritePosition を降順にソートして最大値を取得する
     const favorites = await Memo.find({ favorite: true }).sort(
       '-favoritePosition'
     );
-    //favoritePosition の最大値を取る
-    // console.log(favorites[0].favoritePosition);
-    // この修正は数字が重複するpositionにも加える必要がある
 
     //favorite がtrue なら、favoritePosition を追加する
     if (favorite === true) {
@@ -88,8 +85,6 @@ exports.updatePosition = async (req, res) => {
   // 変更したposition ごと、memoId に上書き保存する
   try {
     for (const updateInfo of req.body) {
-      // console.log(i, updateInfo._id, updateInfo.position);
-
       const updatedMemo = await Memo.findByIdAndUpdate(updateInfo._id, {
         $set: updateInfo,
       });

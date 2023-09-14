@@ -19,6 +19,34 @@ const memoSchema = new Schema({
     type: String,
     default: 'ここに自由に記入してください。',
   },
+  discovery: {
+    type: String,
+    default: 'アイデアを記入してください。',
+  },
+  inheritance: {
+    type: String,
+    default: 'アイデアを記入してください。',
+  },
+  storyRule: {
+    type: String,
+    default: 'アイデアを記入してください。',
+  },
+  startStory: {
+    type: String,
+    default: 'アイデアを記入してください。',
+  },
+  orderStory: {
+    type: String,
+    default: 'アイデアを記入してください。',
+  },
+  endStory: {
+    type: String,
+    default: 'アイデアを記入してください。',
+  },
+  solution: {
+    type: String,
+    default: '選択してください',
+  },
   position: {
     type: Number,
   },
