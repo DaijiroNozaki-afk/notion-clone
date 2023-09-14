@@ -142,6 +142,9 @@ const Memo = () => {
     },
     width: '100%',
   });
+  const getCoreTextFieldStyle = () => ({
+    width: '30%',
+  });
   return (
     <>
       <Box>
@@ -201,7 +204,7 @@ const Memo = () => {
           justifyContent: 'space-around',
         }}
       >
-        <Box sx={{ width: 'calc(100%/3)' }}>
+        <Box sx={getCoreTextFieldStyle}>
           <h4 style={{ width: '100%' }}>発見</h4>
           <TextField
             value={
@@ -211,7 +214,7 @@ const Memo = () => {
             sx={getTextFieldStyle()}
           />
         </Box>
-        <Box sx={{ width: 'calc(100%/3)' }}>
+        <Box sx={getCoreTextFieldStyle}>
           <h4>継承</h4>
           <TextField
             value={
@@ -221,7 +224,7 @@ const Memo = () => {
             sx={getTextFieldStyle()}
           />
         </Box>
-        <Box sx={{ width: 'calc(100%/3)' }}>
+        <Box sx={getCoreTextFieldStyle}>
           <h4>法則</h4>
           <TextField
             value={
@@ -234,19 +237,14 @@ const Memo = () => {
       </Box>
       <h3>ストーリー</h3>
 
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
+      <Box>
         <Box>
           <h4>始まり：連想からの逸脱</h4>
           <TextField
             value={
               '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
             }
+            multiline
             sx={getTextFieldStyle()}
           />
         </Box>
@@ -256,20 +254,24 @@ const Memo = () => {
             value={
               '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
             }
+            multiline
             sx={getTextFieldStyle()}
           />
         </Box>
         <Box>
           <h4>終わり：結論付ける</h4>
-          <FormControl fullWidth>
+          <FormControl sx={{ width: '300px' }}>
             <InputLabel id="demo-simple-select-label">解決方法</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={'解決'}
+              value={'解決方法を選んでください'}
               label="Age"
               // onChange={handleChange}
             >
+              <MenuItem value={'解決方法を選んでください'}>
+                解決方法を選んでください
+              </MenuItem>
               <MenuItem value={'感情的な解決'}>感情的な解決</MenuItem>
               <MenuItem value={'乗り越えと共感原則の解決'}>
                 乗り越えと共感原則の解決
@@ -287,6 +289,7 @@ const Memo = () => {
             value={
               '愛(いと)しさ溢(あふ)れ、心躍(こころおど)る花(はな)火(び)と共(とも)に、永遠(えいえん)の誓(ちか)いを立(た)てる'
             }
+            multiline
             sx={getTextFieldStyle()}
           />
         </Box>
