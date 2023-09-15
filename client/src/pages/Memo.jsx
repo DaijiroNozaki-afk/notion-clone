@@ -8,6 +8,7 @@ import {
   Select,
   Snackbar,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
@@ -122,34 +123,6 @@ const Memo = () => {
       }
     }, timeout);
   };
-
-  // const updateDescription = async (e) => {
-  //   clearTimeout(timer);
-  //   const newDescription = e.target.value;
-  //   setDescription(newDescription);
-
-  //   timer = setTimeout(async () => {
-  //     try {
-  //       await memoApi.update(memoId, { description: newDescription });
-  //     } catch (err) {
-  //       alert('updateDescription ' + err);
-  //     }
-  //   }, timeout);
-  // };
-  // const updateDiscover = async (e) => {
-  //   clearTimeout(timer);
-  //   const newDiscover = e.target.value;
-  //   setDiscover(newDiscover);
-
-  //   timer = setTimeout(async () => {
-  //     try {
-  //       await memoApi.update(memoId, { discover: newDiscover });
-  //     } catch (err) {
-  //       alert('updateDiscover ' + err);
-  //     }
-  //   }, timeout);
-  // };
-
   const updateField = async (e, fieldName) => {
     clearTimeout(timer);
     const newValue = e.target.value;
@@ -272,9 +245,25 @@ const Memo = () => {
           <DeleteOutlinedIcon />
         </IconButton>
       </Box>
-      <Box sx={{ padding: '10px 50px' }}>
-        <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'start',
+          alignItems: 'center',
+        }}
+      >
+        <Box
+          sx={{
+            width: '80px',
+          }}
+        >
           <EmojiPicker icon={icon} onChange={onIconChange} />
+        </Box>
+        <Box
+          sx={{
+            width: 'calc(100% - 80px)',
+          }}
+        >
           <TextField
             onChange={updateTitle}
             label={'題名'}
@@ -293,22 +282,25 @@ const Memo = () => {
               },
             }}
           />
-          <TextField
-            onChange={updateDescription}
-            label={'本文'}
-            value={formData.description}
-            placeholder="追加"
-            variant="outlined"
-            multiline
-            rows={4}
-            fullWidth
-            sx={{
-              '.MuiOutlinedInput-input': { padding: 0 },
-              '.MuiOutlinedInput-notchedOutline': { border: 'none' },
-              '.MuiOutlinedInput-root': { fontSize: '1rem' },
-            }}
-          />
         </Box>
+      </Box>
+      <Tooltip title="この回だけのあらすじを書く。" placement="top-start" arrow>
+        <h3>あらすじ</h3>
+      </Tooltip>
+      <Box>
+        <TextField
+          onChange={updateDescription}
+          value={formData.description}
+          placeholder="追加"
+          variant="outlined"
+          multiline
+          fullWidth
+          sx={{
+            '.MuiOutlinedInput-input': { padding: 0 },
+            '.MuiOutlinedInput-notchedOutline': { border: 'none' },
+            '.MuiOutlinedInput-root': { fontSize: '1rem' },
+          }}
+        />
       </Box>
       <h3>ストーリーの核</h3>
       <Box
@@ -318,7 +310,9 @@ const Memo = () => {
         }}
       >
         <Box sx={getCoreTextFieldStyle}>
-          <h4 style={{ width: '100%' }}>発見</h4>
+          <Tooltip title="発見" placement="top" arrow>
+            <h4 style={{ width: '100%' }}>発見</h4>
+          </Tooltip>
           <TextField
             value={formData.discovery}
             onChange={updateDiscovery}
@@ -327,7 +321,9 @@ const Memo = () => {
           />
         </Box>
         <Box sx={getCoreTextFieldStyle}>
-          <h4>継承</h4>
+          <Tooltip title="発見" placement="top" arrow>
+            <h4>継承</h4>
+          </Tooltip>
           <TextField
             value={formData.inheritance}
             onChange={updateInheritance}
@@ -336,7 +332,9 @@ const Memo = () => {
           />
         </Box>
         <Box sx={getCoreTextFieldStyle}>
-          <h4>法則</h4>
+          <Tooltip title="発見" placement="top" arrow>
+            <h4>法則</h4>
+          </Tooltip>
           <TextField
             value={formData.storyRule}
             onChange={updateStoryRule}
@@ -349,7 +347,9 @@ const Memo = () => {
 
       <Box>
         <Box>
-          <h4>始まり：連想からの逸脱</h4>
+          <Tooltip title="発見" placement="top-start" arrow>
+            <h4>始まり：連想からの逸脱</h4>
+          </Tooltip>
           <TextField
             value={formData.startStory}
             onChange={updateStartStory}
@@ -358,7 +358,9 @@ const Memo = () => {
           />
         </Box>
         <Box>
-          <h4>順序：反論する</h4>
+          <Tooltip title="発見" placement="top-start" arrow>
+            <h4>順序：反論する</h4>
+          </Tooltip>
           <TextField
             value={formData.orderStory}
             onChange={updateOrderStory}
@@ -367,7 +369,9 @@ const Memo = () => {
           />
         </Box>
         <Box>
-          <h4>終わり：結論付ける</h4>
+          <Tooltip title="発見" placement="top-start" arrow>
+            <h4>終わり：結論付ける</h4>
+          </Tooltip>
           <FormControl sx={{ width: '300px' }}>
             <InputLabel id="demo-simple-select-label">解決方法</InputLabel>
             <Select
@@ -401,7 +405,6 @@ const Memo = () => {
         </Box>
       </Box>
       <Box>
-        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
         <Snackbar
           open={openSnack.isOpen}
           autoHideDuration={6000}

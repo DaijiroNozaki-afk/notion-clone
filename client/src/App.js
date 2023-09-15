@@ -9,6 +9,7 @@ import { blue } from '@mui/material/colors';
 import AppLayout from './components/layout/AppLayout';
 import Home from './pages/Home';
 import Memo from './pages/Memo';
+import Trash from './pages/Trash';
 
 function App() {
   const theme = createTheme({
@@ -27,6 +28,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="memo" element={<Home />} />
             <Route path="memo/:memoId" element={<Memo />} />
+            <Route path="trash" element={<Trash />} />
           </Route>
         </Routes>
       </BrowserRouter>

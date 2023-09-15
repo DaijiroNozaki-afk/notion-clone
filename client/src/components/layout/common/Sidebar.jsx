@@ -202,7 +202,7 @@ const Sidebar = () => {
           backgroundColor: assets.colors.secondary,
         }}
       >
-        <ListItemButton>
+        <ListItemButton to="/">
           <Box
             sx={{
               width: '100%',
@@ -345,6 +345,21 @@ const Sidebar = () => {
             )}
           </Droppable>
         </DragDropContext>
+
+        <ListItemButton to="/trash">
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant="body2" fontWeight="700">
+              ゴミ箱
+            </Typography>
+          </Box>
+        </ListItemButton>
       </List>
     </Drawer>
   );
