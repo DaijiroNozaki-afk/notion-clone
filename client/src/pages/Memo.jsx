@@ -25,14 +25,6 @@ import CloseIcon from '@mui/icons-material/Close';
 const Memo = () => {
   const { memoId } = useParams();
   const [title, setTitle] = useState('');
-  // const [description, setDescription] = useState('');
-  // const [discovery, setDiscovery] = useState('');
-  // const [inheritance, setInheritance] = useState('');
-  // const [storyRule, setStoryRule] = useState('');
-  // const [startStory, setStartStory] = useState('');
-  // const [orderStory, setOrderStory] = useState('');
-  // const [endStory, setEndStory] = useState('');
-  // const [solution, setSolution] = useState('');
   const [formData, setFormData] = useState({
     description: '',
     discovery: '',
@@ -166,23 +158,46 @@ const Memo = () => {
   };
 
   const deleteMemo = async () => {
+    // 直接削除ではなく、「ゴミ箱に入れる」事でユーザーの削除ミスを取り返せるようにする
     const memoTitle = title;
+    let temp = [...memos];
+    const index = temp.findIndex((e) => e._id === memoId);
+    const isTrash = temp[index].isTrash;
+    temp[index] = { ...temp[index], isTrash: !isTrash };
+    const newMemos = memos.filter((e) => e._id !== memoId);
+    if (newMemos.length === 0) {
+      navigate('/memo');
+    } else {
+      navigate(`/memo/${newMemos[0]._id}`);
+    }
+    dispatch(setMemo(newMemos));
+    const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
+    dispatch(setFavorite(newFavoriteMemos));
+
     try {
-      await memoApi.delete(memoId);
-      const newMemos = memos.filter((e) => e._id !== memoId);
+      await memoApi.update(memoId, { isTrash: !isTrash });
       handleClick(memoTitle + ' を削除しました');
-      if (newMemos.length === 0) {
-        navigate('/memo');
-      } else {
-        navigate(`/memo/${newMemos[0]._id}`);
-      }
-      dispatch(setMemo(newMemos));
       //お気に入りの処理
-      const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
-      dispatch(setFavorite(newFavoriteMemos));
     } catch (err) {
       alert('deleteMemo ' + err);
     }
+    // const memoTitle = title;
+    // try {
+    //   await memoApi.delete(memoId);
+    //   const newMemos = memos.filter((e) => e._id !== memoId);
+    //   handleClick(memoTitle + ' を削除しました');
+    //   if (newMemos.length === 0) {
+    //     navigate('/memo');
+    //   } else {
+    //     navigate(`/memo/${newMemos[0]._id}`);
+    //   }
+    //   dispatch(setMemo(newMemos));
+    //   //お気に入りの処理
+    //   const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
+    //   dispatch(setFavorite(newFavoriteMemos));
+    // } catch (err) {
+    //   alert('deleteMemo ' + err);
+    // }
   };
 
   const onIconChange = async (newIcon) => {

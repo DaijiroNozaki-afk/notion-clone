@@ -1,6 +1,7 @@
 const Memo = require('../models/memo');
 
 exports.create = async (req, res) => {
+  console.log('exports.create');
   try {
     const memoCount = await Memo.find().count();
     //position の最大値を取得する
@@ -18,18 +19,36 @@ exports.create = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
+  console.log('exports.getAll');
   try {
-    const memos = await Memo.find({ user: req.user._id }).sort('-position');
+    const memos = await Memo.find({ user: req.user._id, isTrash: false }).sort(
+      '-position'
+    );
     res.status(200).json(memos);
   } catch (err) {
     res.status(500).json(err);
   }
 };
 exports.getFavoriteAll = async (req, res) => {
+  console.log('exports.getFavoriteAll');
   try {
-    const memos = await Memo.find({ user: req.user._id, favorite: true }).sort(
-      '-favoritePosition'
-    );
+    const memos = await Memo.find({
+      user: req.user._id,
+      favorite: true,
+      isTrash: false,
+    }).sort('-favoritePosition');
+    res.status(200).json(memos);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+exports.getTrashAll = async (req, res) => {
+  console.log('exports.getTrashAll');
+  try {
+    const memos = await Memo.find({
+      user: req.user._id,
+      isTrash: true,
+    }).sort('-position');
     res.status(200).json(memos);
   } catch (err) {
     res.status(500).json(err);
@@ -37,6 +56,7 @@ exports.getFavoriteAll = async (req, res) => {
 };
 
 exports.getOne = async (req, res) => {
+  console.log('exports.getOne');
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
@@ -48,8 +68,13 @@ exports.getOne = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
+  console.log('exports.update');
   const { memoId } = req.params;
-  const { title, description, favorite } = req.body;
+  const { title, description, favorite, isTrash } = req.body;
+  const { format } = require('date-fns');
+  // 現在の時刻を取得し、指定したフォーマットで表示する
+  const currentDate = new Date();
+  const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
   try {
     if (title === '') req.body.title = '無題';
     if (description === '')
@@ -69,7 +94,15 @@ exports.update = async (req, res) => {
       //favorite がfalse なら、favoritePosition を削除する
       req.body.favoritePosition = '';
     }
-    //
+
+    //isTrash がtrue なら、trashDate を追加する
+    // console.log(currentDate, formattedDate);
+    if (isTrash === true) {
+      req.body.trashDate = formattedDate;
+    } else if (isTrash === false) {
+      //isTrash がfalse なら、trashDate を削除する
+      req.body.trashDate = '';
+    }
 
     const updatedMemo = await Memo.findByIdAndUpdate(memoId, {
       $set: req.body,
@@ -82,6 +115,7 @@ exports.update = async (req, res) => {
 };
 
 exports.updatePosition = async (req, res) => {
+  console.log('exports.updatePosition');
   // 変更したposition ごと、memoId に上書き保存する
   try {
     for (const updateInfo of req.body) {
@@ -99,6 +133,7 @@ exports.updatePosition = async (req, res) => {
 };
 
 exports.updateFavoritePosition = async (req, res) => {
+  console.log('exports.updateFavoritePosition');
   // 変更したfavoritePosition ごと、memoId に上書き保存する
   try {
     for (const updateInfo of req.body) {
@@ -119,6 +154,7 @@ exports.updateFavoritePosition = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
+  console.log('exports.delete');
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });

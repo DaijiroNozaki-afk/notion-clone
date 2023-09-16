@@ -57,6 +57,14 @@ const memoSchema = new Schema({
   favoritePosition: {
     type: Number,
   },
+  isTrash: {
+    type: Boolean,
+    default: false,
+  },
+  trashDate: {
+    type: Date,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model('Memo', memoSchema);

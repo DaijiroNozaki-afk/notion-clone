@@ -14,6 +14,8 @@ router.get(
   tokenHandler.verifyToken,
   memoController.getFavoriteAll
 );
+//ログインしているユーザーが投稿したゴミ箱メモを全て取得
+router.get('/trash', tokenHandler.verifyToken, memoController.getTrashAll);
 
 //ログインしているユーザーが投稿したメモを1つ取得
 router.get('/:memoId', tokenHandler.verifyToken, memoController.getOne);

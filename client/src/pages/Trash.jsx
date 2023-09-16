@@ -1,36 +1,59 @@
-import { LoadingButton } from '@mui/lab';
-import { Box } from '@mui/material';
-import React, { useState } from 'react';
+import { Drawer, List, ListItemButton, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import memoApi from '../api/memoApi';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTrash } from '../redux/features/trashSlice';
+import assets from '../assets/index';
 const Trash = () => {
-  const Navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const trashMemos = useSelector((state) => state.trashMemo.value);
+  // getTrashAll API を使って、ゴミ箱の中身を表示
+  // ユーザーからのアクセスがあれば、30日を過ぎたメモを削除する
 
-  const createMemo = async () => {
-    try {
-      setLoading(true);
-      const res = await memoApi.create();
-      // console.log(res);
-      Navigate(`/memo/${res._id}`);
-    } catch (err) {
-      alert('Trash ' + err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const getTrash = async () => {
+      try {
+        const res = await memoApi.getTrashAll();
+        dispatch(setTrash(res));
+      } catch (err) {
+        alert('useEffect getTrash' + err);
+      }
+    };
+    getTrash();
+    // お気に入りを表示する
+  }, [dispatch]);
 
+  const grid = 8;
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    useSelect: 'none',
+    margin: `0 0 ${grid} 0`,
+    background: isDragging ? 'lightgreen' : 'white',
+    ...draggableStyle,
+  });
   return (
-    <Box
+    <List
       sx={{
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: 250,
+        height: '100vh',
+        backgroundColor: assets.colors.secondary,
       }}
     >
       Trash
-    </Box>
+      {trashMemos.map((item, index) => (
+        <ListItemButton
+          sx={{ pl: '20px' }}
+          component={Link}
+          // to={`/memo/${item._id}`}
+          to=""
+          key={item._id}
+        >
+          <Typography>
+            {item.icon} {item.title}
+          </Typography>
+        </ListItemButton>
+      ))}
+    </List>
   );
 };
 
