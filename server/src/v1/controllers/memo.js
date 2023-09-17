@@ -1,7 +1,7 @@
 const Memo = require('../models/memo');
 
 exports.create = async (req, res) => {
-  console.log('exports.create');
+  // console.log('exports.create');
   try {
     const memoCount = await Memo.find().count();
     //position の最大値を取得する
@@ -19,7 +19,7 @@ exports.create = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
-  console.log('exports.getAll');
+  // console.log('exports.getAll');
   try {
     const memos = await Memo.find({ user: req.user._id, isTrash: false }).sort(
       '-position'
@@ -30,7 +30,7 @@ exports.getAll = async (req, res) => {
   }
 };
 exports.getFavoriteAll = async (req, res) => {
-  console.log('exports.getFavoriteAll');
+  // console.log('exports.getFavoriteAll');
   try {
     const memos = await Memo.find({
       user: req.user._id,
@@ -43,21 +43,40 @@ exports.getFavoriteAll = async (req, res) => {
   }
 };
 exports.getTrashAll = async (req, res) => {
-  console.log('exports.getTrashAll');
+  // console.log('exports.getTrashAll');
+  // 現在の時刻を取得
+  const dateBefore30d = new Date();
+  dateBefore30d.setDate(dateBefore30d.getDate() - 30);
   try {
     //ゴミ箱の中のメモを返すが、削除から30日以上経過していた場合は完全に削除する
     const memos = await Memo.find({
       user: req.user._id,
       isTrash: true,
     }).sort('-position');
-    res.status(200).json(memos);
+    let refreshMemos = [];
+    for (const updateInfo of memos) {
+      // console.log(dateBefore30d, updateInfo.trashDate);
+      // console.log(dateBefore30d > updateInfo.trashDate);
+      if (dateBefore30d > updateInfo.trashDate) {
+        //ゴミ箱に入れてから30日以上経過したメモを削除する
+        await Memo.deleteOne({ _id: updateInfo._id });
+      } else {
+        refreshMemos = [...refreshMemos, updateInfo];
+      }
+      // const updatedMemo = await Memo.findByIdAndUpdate(updateInfo._id, {
+      //   $set: updateInfo,
+      // });
+    }
+    // console.log(memos);
+    // console.log(refreshMemos);
+    res.status(200).json(refreshMemos);
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
 exports.getOne = async (req, res) => {
-  console.log('exports.getOne');
+  // console.log('exports.getOne');
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
@@ -69,13 +88,11 @@ exports.getOne = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  console.log('exports.update');
+  // console.log('exports.update');
   const { memoId } = req.params;
   const { title, description, favorite, isTrash } = req.body;
-  const { format } = require('date-fns');
-  // 現在の時刻を取得し、指定したフォーマットで表示する
+  // 現在の時刻を取得
   const currentDate = new Date();
-  const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
   try {
     if (title === '') req.body.title = '無題';
     if (description === '')
@@ -97,9 +114,8 @@ exports.update = async (req, res) => {
     }
 
     //isTrash がtrue なら、trashDate を追加する
-    // console.log(currentDate, formattedDate);
     if (isTrash === true) {
-      req.body.trashDate = formattedDate;
+      req.body.trashDate = currentDate;
     } else if (isTrash === false) {
       //isTrash がfalse なら、trashDate を削除する
       req.body.trashDate = '';
@@ -116,10 +132,11 @@ exports.update = async (req, res) => {
 };
 
 exports.updatePosition = async (req, res) => {
-  console.log('exports.updatePosition');
+  // console.log('exports.updatePosition');
   // 変更したposition ごと、memoId に上書き保存する
   try {
     for (const updateInfo of req.body) {
+      console.log(updateInfo._id);
       const updatedMemo = await Memo.findByIdAndUpdate(updateInfo._id, {
         $set: updateInfo,
       });
@@ -134,7 +151,7 @@ exports.updatePosition = async (req, res) => {
 };
 
 exports.updateFavoritePosition = async (req, res) => {
-  console.log('exports.updateFavoritePosition');
+  // console.log('exports.updateFavoritePosition');
   // 変更したfavoritePosition ごと、memoId に上書き保存する
   try {
     for (const updateInfo of req.body) {
@@ -155,7 +172,7 @@ exports.updateFavoritePosition = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  console.log('exports.delete');
+  // console.log('exports.delete');
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });

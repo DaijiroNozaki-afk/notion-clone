@@ -42,7 +42,6 @@ const Memo = () => {
   const favoriteMemos = useSelector((state) => state.favoriteMemo.value);
   const [isStar, setIsStar] = useState(false);
   const navigate = useNavigate();
-  // const [openSnack, setOpenSnack] = useState(false);
   const [openSnack, setOpenSnack] = useState({
     isOpen: false,
     message: '',

@@ -180,9 +180,9 @@ const Trash = () => {
                   onClick={() => undo(item)}
                   sx={{ margin: '0 0 auto' }}
                 >
-                  {/* <Tooltip title="メモを元に戻す" placement="top-start" arrow> */}
-                  <UndoIcon />
-                  {/* </Tooltip> */}
+                  <Tooltip title="メモを元に戻す" placement="top-start" arrow>
+                    <UndoIcon />
+                  </Tooltip>
                 </IconButton>
                 <IconButton
                   onClick={() => deleteForever(item)}
