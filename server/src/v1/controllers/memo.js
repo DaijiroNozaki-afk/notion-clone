@@ -45,6 +45,7 @@ exports.getFavoriteAll = async (req, res) => {
 exports.getTrashAll = async (req, res) => {
   console.log('exports.getTrashAll');
   try {
+    //ゴミ箱の中のメモを返すが、削除から30日以上経過していた場合は完全に削除する
     const memos = await Memo.find({
       user: req.user._id,
       isTrash: true,
