@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
     const user = await User.create(req.body);
     //JWTの発行
     const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
-      expiresIn: '24h',
+      expiresIn: '10d', // 10日間
     });
     return res.status(200).json({ user, token });
   } catch (err) {
