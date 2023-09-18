@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   IconButton,
   InputLabel,
@@ -128,32 +127,6 @@ const Memo = () => {
         alert(`update${fieldName} ${err}`);
       }
     }, timeout);
-  };
-
-  const updateDescription = (e) => {
-    updateField(e, 'description');
-  };
-
-  const updateDiscovery = (e) => {
-    updateField(e, 'discovery');
-  };
-  const updateInheritance = (e) => {
-    updateField(e, 'inheritance');
-  };
-  const updateStoryRule = (e) => {
-    updateField(e, 'storyRule');
-  };
-  const updateStartStory = (e) => {
-    updateField(e, 'startStory');
-  };
-  const updateOrderStory = (e) => {
-    updateField(e, 'orderStory');
-  };
-  const updateEndStory = (e) => {
-    updateField(e, 'endStory');
-  };
-  const updateSolution = (e) => {
-    updateField(e, 'solution');
   };
 
   const deleteMemo = async () => {
@@ -303,7 +276,7 @@ const Memo = () => {
       </Tooltip>
       <Box>
         <TextField
-          onChange={updateDescription}
+          onChange={(e) => updateField(e, 'description')}
           value={formData.description}
           placeholder="追加"
           variant="outlined"
@@ -329,7 +302,7 @@ const Memo = () => {
           </Tooltip>
           <TextField
             value={formData.discovery}
-            onChange={updateDiscovery}
+            onChange={(e) => updateField(e, 'discovery')}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -340,7 +313,7 @@ const Memo = () => {
           </Tooltip>
           <TextField
             value={formData.inheritance}
-            onChange={updateInheritance}
+            onChange={(e) => updateField(e, 'inheritance')}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -351,7 +324,7 @@ const Memo = () => {
           </Tooltip>
           <TextField
             value={formData.storyRule}
-            onChange={updateStoryRule}
+            onChange={(e) => updateField(e, 'storyRule')}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -366,7 +339,7 @@ const Memo = () => {
           </Tooltip>
           <TextField
             value={formData.startStory}
-            onChange={updateStartStory}
+            onChange={(e) => updateField(e, 'startStory')}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -377,7 +350,7 @@ const Memo = () => {
           </Tooltip>
           <TextField
             value={formData.orderStory}
-            onChange={updateOrderStory}
+            onChange={(e) => updateField(e, 'orderStory')}
             multiline
             sx={getTextFieldStyle()}
           />
@@ -392,7 +365,7 @@ const Memo = () => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={formData.solution}
-              onChange={updateSolution}
+              onChange={(e) => updateField(e, 'solution')}
               label="選択してください"
               // onChange={handleChange}
             >
@@ -412,7 +385,7 @@ const Memo = () => {
           </FormControl>
           <TextField
             value={formData.endStory}
-            onChange={updateEndStory}
+            onChange={(e) => updateField(e, 'endStory')}
             multiline
             sx={getTextFieldStyle()}
           />

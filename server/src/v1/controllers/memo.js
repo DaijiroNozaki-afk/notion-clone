@@ -55,20 +55,13 @@ exports.getTrashAll = async (req, res) => {
     }).sort('-position');
     let refreshMemos = [];
     for (const updateInfo of memos) {
-      // console.log(dateBefore30d, updateInfo.trashDate);
-      // console.log(dateBefore30d > updateInfo.trashDate);
       if (dateBefore30d > updateInfo.trashDate) {
         //ゴミ箱に入れてから30日以上経過したメモを削除する
         await Memo.deleteOne({ _id: updateInfo._id });
       } else {
         refreshMemos = [...refreshMemos, updateInfo];
       }
-      // const updatedMemo = await Memo.findByIdAndUpdate(updateInfo._id, {
-      //   $set: updateInfo,
-      // });
     }
-    // console.log(memos);
-    // console.log(refreshMemos);
     res.status(200).json(refreshMemos);
   } catch (err) {
     res.status(500).json(err);
