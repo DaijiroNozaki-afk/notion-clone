@@ -153,23 +153,6 @@ const Memo = () => {
     } catch (err) {
       alert('deleteMemo ' + err);
     }
-    // const memoTitle = title;
-    // try {
-    //   await memoApi.delete(memoId);
-    //   const newMemos = memos.filter((e) => e._id !== memoId);
-    //   handleClick(memoTitle + ' を削除しました');
-    //   if (newMemos.length === 0) {
-    //     navigate('/memo');
-    //   } else {
-    //     navigate(`/memo/${newMemos[0]._id}`);
-    //   }
-    //   dispatch(setMemo(newMemos));
-    //   //お気に入りの処理
-    //   const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
-    //   dispatch(setFavorite(newFavoriteMemos));
-    // } catch (err) {
-    //   alert('deleteMemo ' + err);
-    // }
   };
 
   const onIconChange = async (newIcon) => {
