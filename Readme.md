@@ -8,8 +8,6 @@
 
 ## インストール手順:
 
-        プロジェクトをクローンしてローカル環境で実行するためのステップバイステップのインストール手順を提供します。依存関係のインストールや設定ファイルの調整などが含まれます。
-
 VSCode をインストールする
 [Visual Studio Code](https://azure.microsoft.com/ja-jp/products/visual-studio-code)のページを検索などで開いて、お使いの OS にあったものををローカルにダウンロードしてインストールします
 
@@ -105,7 +103,7 @@ notion-clone
 - /server - サーバーサイドを Node.js で作成しています。
   - .env - MongoDB を使うための設定が書かれていますが、個人の MongoDB のアカウントを利用しているので非公開です。アプリを利用するあなたのアカウントを利用して設定してください。
 
-.env で設定する MongoDB の定数
+### .env で設定する MongoDB の定数
 
 - MONGODB_URL = ''
   - MongoDB ＞ Database ＞ Connect ＞ Connect to your application ＞ Add your connection string into your application code に書かれているもの
@@ -116,7 +114,7 @@ notion-clone
 
   - jsonwebtoken で利用するキー、パスワードのように予測されない文字列を記載する
 
-  使い方:
+## 使い方
 
 - アプリにアクセスすると、ログイン画面が表示されます。
   - アカウントがない場合、「新規作成」をクリックして、受信可能なメールアドレスを使ってアカウントを作成します。
@@ -134,7 +132,7 @@ notion-clone
 
 ## 技術スタック:
 
-** /client **
+**/client**
 
 - "@emoji-mart/react": "^1.1.1",
 - "@emotion/react": "^11.11.1",
@@ -156,7 +154,7 @@ notion-clone
 - "styled-components": "^5.3.11",
 - "web-vitals": "^0.2.4"
 
-  ** /server **
+**/server**
 
 - "cors": "^2.8.5",
 - "crypto-js": "^4.1.1",
@@ -181,13 +179,13 @@ MongoDB 6.0.10
 
 #### データベーススキーマ
 
-** users **
+**users**
 
 - \_id: 固有の ID です。MongoDB で自動的に割り振られます
 - username: 利用者の名前です。
 - password: パスワードは Node.js で CryptoJS を使って暗号化しています。
 
-** memos **
+**memos**
 
 - \_id: 固有の ID です。MongoDB で自動的に割り振られます
 - user:メモを作成したユーザー ID です。
@@ -207,7 +205,7 @@ MongoDB 6.0.10
 - isTrash:「ゴミ箱」の情報を保存します。
 - trashDate:「ゴミ箱」に入れた日時を保存します。
 
-  バージョン履歴:
+## バージョン履歴:
 
 - client
   - 0.2.0
